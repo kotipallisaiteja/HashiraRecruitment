@@ -13,7 +13,7 @@ function decodeValue(valueStr, base) {
 
 // Lagrange interpolation to get constant term c at x=0
 function lagrangeInterpolation(points, k) {
-    let secret = 0n;
+    let constant = 0n;
 
     for (let i = 0; i < k; i++) {
         const xi = BigInt(points[i].x);
@@ -30,13 +30,13 @@ function lagrangeInterpolation(points, k) {
             }
         }
 
-        secret += yi * numerator / denominator;
+        constant += yi * numerator / denominator;
     }
 
-    return secret;
+    return constant;
 }
 
-function findSecret(fileName) {
+function findConstant(fileName) {
     const data = JSON.parse(fs.readFileSync(fileName, "utf8"));
     const n = data.keys.n;
     const k = data.keys.k;
@@ -55,11 +55,11 @@ function findSecret(fileName) {
     points.sort((a, b) => a.x - b.x);
 
     // Use first k points
-    const secret = lagrangeInterpolation(points, k);
+    const constant = lagrangeInterpolation(points, k);
 
-    console.log(`Secret from ${fileName}: ${secret.toString()}`);
+    console.log(constant.toString());
 }
 
 // Run for testcases
-findSecret("testcase1.json");
-findSecret("testcase2.json");
+findConstant("testcase1.json");
+findConstant("testcase2.json");
